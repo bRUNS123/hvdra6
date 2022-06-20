@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 class EventFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  // String title = '123';
-  // String description = '';
+  String? title;
+  String? description;
 
   DateTimeRange? dateRange;
   TextEditingController controllerInitialDate = TextEditingController();

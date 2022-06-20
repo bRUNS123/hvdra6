@@ -18,9 +18,9 @@ class AuthService extends ChangeNotifier {
       "password": password,
     };
     final url = Uri.http(_baseURL, '/api/token/');
-    final resp = await http.post(url,
-        body: json.encode(authData),
-        headers: {"Content-Type": "application/json"});
+    final resp = await http.post(url, body: json.encode(authData), headers: {
+      "Content-Type": "application/json",
+    });
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if (decodedResp.containsKey('access')) {

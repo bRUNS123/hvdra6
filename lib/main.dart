@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'bloc/blocs.dart';
 import 'generated/l10n.dart';
+import 'services/event_service.dart';
 import 'services/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -31,7 +32,7 @@ void main() async {
           create: (_) => AuthService(),
         ),
         // ChangeNotifierProvider(create: (_) => EventFormProvider())
-        // ChangeNotifierProvider(create: (_) => EventService()),
+        ChangeNotifierProvider(create: (_) => EventService()),
       ],
       child: MyApp(),
     ),
