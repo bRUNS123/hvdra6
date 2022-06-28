@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydraflutter/providers/event_form_provider.dart';
+import 'package:hydraflutter/providers/user_form_provider.dart';
 
 import 'package:hydraflutter/routes/routes.dart';
 import 'package:hydraflutter/screens/auth/login/login_screen.dart';
@@ -9,9 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'bloc/blocs.dart';
 import 'generated/l10n.dart';
-import 'services/event_service.dart';
+
 import 'services/services.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,10 @@ void main() async {
           create: (_) => AuthService(),
         ),
         // ChangeNotifierProvider(create: (_) => EventFormProvider())
+        ChangeNotifierProvider(create: (_) => UserFormProvider()),
+
         ChangeNotifierProvider(create: (_) => EventService()),
+        ChangeNotifierProvider(create: (_) => EventFormProvider()),
       ],
       child: MyApp(),
     ),

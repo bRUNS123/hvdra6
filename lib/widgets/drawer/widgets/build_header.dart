@@ -31,30 +31,34 @@ class BuildHeader extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.secondary,
+            SizedBox(
+              width: 150,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(
-                    email,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.secondary,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Text(
+                      email,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Spacer(),
             Padding(
@@ -67,7 +71,7 @@ class BuildHeader extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

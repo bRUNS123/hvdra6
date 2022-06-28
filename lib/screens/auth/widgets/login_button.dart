@@ -6,15 +6,14 @@ import 'package:provider/provider.dart';
 import '../../../providers/login_form_provider.dart';
 
 class LoginButton extends StatelessWidget {
-  String textButton;
+  final String textButton;
+  final LoginFormProvider loginForm;
 
-  LoginButton({
+  const LoginButton({
     Key? key,
     required this.loginForm,
     required this.textButton,
   }) : super(key: key);
-
-  final LoginFormProvider loginForm;
 
   @override
   Widget build(BuildContext context) {

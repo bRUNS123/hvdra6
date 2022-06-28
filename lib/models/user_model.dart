@@ -45,8 +45,8 @@ class UserInfoResponse {
   String? lastName;
   String? email;
   bool? isActive;
-  dynamic secondLastName;
-  dynamic rut;
+  String? secondLastName;
+  String? rut;
   dynamic birthDate;
   dynamic gender;
   dynamic phoneNumber;
@@ -71,6 +71,77 @@ class UserInfoResponse {
   dynamic companyDiscountPlanHolder;
   List<dynamic>? addresses;
 
+  UserInfoResponse copyWith({
+    int? id,
+    String? fullName,
+    String? firstName,
+    String? lastName,
+    String? email,
+    bool? isActive,
+    String? secondLastName,
+    String? rut,
+    dynamic birthDate,
+    dynamic gender,
+    dynamic phoneNumber,
+    String? notes,
+    bool? isSuperadmin,
+    bool? isEmailActivated,
+    bool? isAdministrative,
+    bool? isWarehouse,
+    bool? isSeller,
+    bool? isProfessional,
+    bool? isPatient,
+    String? patientNotes,
+    dynamic companyDiscountPlanPaymentMethod,
+    bool? isPlanActivated,
+    bool? isPlanHolder,
+    bool? isPlanBeneficiary,
+    dynamic companyDiscountPlanActivationDate,
+    dynamic companyDiscountPlanDeactivationDate,
+    int? user,
+    int? defaultCompany,
+    dynamic companyDiscountPlan,
+    dynamic companyDiscountPlanHolder,
+    List<dynamic>? addresses,
+  }) =>
+      UserInfoResponse(
+        id: id ?? this.id,
+        fullName: fullName ?? this.fullName,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        email: email ?? this.email,
+        isActive: isActive ?? this.isActive,
+        secondLastName: secondLastName ?? this.secondLastName,
+        rut: rut ?? this.rut,
+        birthDate: birthDate ?? this.birthDate,
+        gender: gender ?? this.gender,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        notes: notes ?? this.notes,
+        isSuperadmin: isSuperadmin ?? this.isSuperadmin,
+        isEmailActivated: isEmailActivated ?? this.isEmailActivated,
+        isAdministrative: isAdministrative ?? this.isAdministrative,
+        isWarehouse: isWarehouse ?? this.isWarehouse,
+        isSeller: isSeller ?? this.isSeller,
+        isProfessional: isProfessional ?? this.isProfessional,
+        isPatient: isPatient ?? this.isPatient,
+        patientNotes: patientNotes ?? this.patientNotes,
+        companyDiscountPlanPaymentMethod: companyDiscountPlanPaymentMethod ??
+            this.companyDiscountPlanPaymentMethod,
+        isPlanActivated: isPlanActivated ?? this.isPlanActivated,
+        isPlanHolder: isPlanHolder ?? this.isPlanHolder,
+        isPlanBeneficiary: isPlanBeneficiary ?? this.isPlanBeneficiary,
+        companyDiscountPlanActivationDate: companyDiscountPlanActivationDate ??
+            this.companyDiscountPlanActivationDate,
+        companyDiscountPlanDeactivationDate:
+            companyDiscountPlanDeactivationDate ??
+                this.companyDiscountPlanDeactivationDate,
+        user: user ?? this.user,
+        defaultCompany: defaultCompany ?? this.defaultCompany,
+        companyDiscountPlan: companyDiscountPlan ?? this.companyDiscountPlan,
+        companyDiscountPlanHolder:
+            companyDiscountPlanHolder ?? this.companyDiscountPlanHolder,
+        addresses: addresses ?? this.addresses,
+      );
   factory UserInfoResponse.fromJson(String str) =>
       UserInfoResponse.fromMap(json.decode(str));
 
@@ -113,7 +184,6 @@ class UserInfoResponse {
         companyDiscountPlanHolder: json["company_discount_plan_holder"],
         addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
       );
-
   factory UserInfoResponse.toClear(Map<String, dynamic> json) =>
       UserInfoResponse(
         id: json[null],
@@ -217,6 +287,52 @@ class UserInfoResponse {
         "default_company": defaultCompany,
         "company_discount_plan": companyDiscountPlan,
         "company_discount_plan_holder": companyDiscountPlanHolder,
-        "addresses": List<dynamic>.from(addresses!.map((x) => x)),
+        "addresses": addresses,
+        // "addresses": List<dynamic>.from(addresses!.map((x) => x)),
+      };
+}
+
+// To parse this JSON data, do
+//
+//     final userUpdate = userUpdateFromMap(jsonString);
+
+class UserUpdate {
+  UserUpdate({
+    required this.firstName,
+    required this.lastName,
+    required this.secondLastName,
+    required this.email,
+    required this.rut,
+    required this.phoneNumber,
+  });
+
+  String firstName;
+  String lastName;
+  String secondLastName;
+  String email;
+  String rut;
+  String phoneNumber;
+
+  factory UserUpdate.fromJson(String str) =>
+      UserUpdate.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserUpdate.fromMap(Map<String, dynamic> json) => UserUpdate(
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        secondLastName: json["second_last_name"],
+        email: json["email"],
+        rut: json["rut"],
+        phoneNumber: json["phone_number"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "first_name": firstName,
+        "last_name": lastName,
+        "second_last_name": secondLastName,
+        "email": email,
+        "rut": rut,
+        "phone_number": phoneNumber,
       };
 }

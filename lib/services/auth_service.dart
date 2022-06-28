@@ -17,6 +17,7 @@ class AuthService extends ChangeNotifier {
       "username": email,
       "password": password,
     };
+    print(authData);
     final url = Uri.http(_baseURL, '/api/token/');
     final resp = await http.post(url, body: json.encode(authData), headers: {
       "Content-Type": "application/json",
@@ -88,6 +89,21 @@ class AuthService extends ChangeNotifier {
     }
     tokens = {'access': access, 'refresh': refresh};
     return json.encode(tokens);
+  }
+
+  Future<String?> userUpdate(UserUpdate userModel) async {
+    final String? access = await storage.read(key: 'access');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $access'
+    };
+
+    final url = Uri.http(_baseURL, '/profiles/1/');
+    final resp =
+        await http.patch(url, body: userModel.toJson(), headers: headers);
+    print(resp.body);
+
+    return '';
   }
 }
 

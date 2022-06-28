@@ -60,4 +60,4 @@ const appBarColor = Colors.black87;
 var scaffoldColorDark = Colors.grey.shade900;
 var scaffoldColorLight = const Color.fromARGB(255, 222, 240, 202);
 var scaffoldColorBlue = Colors.blueGrey;
-var dateColor = Color.fromARGB(255, 80, 200, 140);
+var dateColor = const Color.fromARGB(255, 80, 200, 140);

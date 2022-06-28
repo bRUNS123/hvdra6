@@ -87,10 +87,22 @@ class BuildName extends StatelessWidget {
           userProvider.userInfo.firstName ?? '',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
+        Text(
+          userProvider.userInfo.lastName ?? '',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
         const SizedBox(height: 4),
         Text(userProvider.userInfo.email ?? '',
             style: const TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 14, color: Colors.grey)),
+        Text(
+          userProvider.userInfo.rut ?? '',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        Text(
+          userProvider.userInfo.phoneNumber.toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ],
     );
   }

@@ -81,9 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
   CurvedNavigationBar curvedNav(
       List<Widget> items, BuildContext context, int currentIndex) {
     final size = MediaQuery.of(context).size;
-    double sizes = MediaQuery.of(context).size.width;
+
     return CurvedNavigationBar(
-        height: sizes * 0.14,
+        height: size.width * 0.14,
         items: items,
         index: currentIndex,
         animationDuration: const Duration(

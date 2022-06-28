@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:hydraflutter/screens/screens.dart';
+import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:hydraflutter/services/services.dart';
 
-import 'package:hydraflutter/themes/appthemes.dart';
-import 'package:hydraflutter/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
+
+// import 'package:hydraflutter/screens/widgets/textedit_field.dart';
 
 import '../../models/models.dart';
 import '../../providers/event_form_provider.dart';
+import 'widgets/pickdate.dart';
 
 class NewEventScreen extends StatelessWidget {
   const NewEventScreen({Key? key}) : super(key: key);
@@ -18,7 +20,6 @@ class NewEventScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        print('gestor');
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -53,29 +54,56 @@ class _EventForm extends StatelessWidget {
     final userProvider = Provider.of<AuthService>(context, listen: false);
     final eventService = Provider.of<EventService>(context, listen: false);
 
+    late List<String> autoCompleteData = ["1", "2", "3", "4", "5", "6"];
     final size = MediaQuery.of(context).size;
     return Form(
       key: eventForm.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(children: [
-        TextField(
-          labelText: 'Titulo',
-          hintText: 'titulo uno...',
-          icon: Icons.label,
-          onChanged: (value) {
-            eventForm.title = value;
+        // CustomTextField(
+        //   labelText: 'Titulo',
+        //   hintText: 'titulo uno...',
+        //   icon: Icons.label,
+        //   onChanged: (value) {
+        //     eventForm.title = value;
+        //   },
+        // ),
+
+        // CustomTextField(
+        //   labelText: 'Descripción',
+        //   hintText: 'descripción del evento...',
+        //   icon: Icons.description,
+        //   onChanged: (value) {
+        //     eventForm.description = value;
+        //   },
+        // ),
+
+//https://www.youtube.com/watch?v=gDryje6oPrk&ab_channel=EasyApproach
+        Autocomplete(
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            // if (textEditingValue.text.isEmpty) {
+            //   return const Iterable<String>.empty();
+            // } else
+            {
+              return autoCompleteData.where((word) => word
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase()));
+            }
+          },
+          onSelected: (String selectString) {},
+          fieldViewBuilder:
+              (context, controller, focusNode, onEdittingComplete) {
+            return CustomTextField(
+                onEditingComplete: onEdittingComplete,
+                focusNode: focusNode,
+                controller: eventForm.controller,
+                labelText: 'Profesional',
+                hintText: 'nombre del profesional',
+                icon: Icons.person);
           },
         ),
 
-        TextField(
-          labelText: 'Descripción',
-          hintText: 'descripción del evento...',
-          icon: Icons.description,
-          onChanged: (value) {
-            eventForm.description = value;
-          },
-        ),
-        TextField(
+        CustomTextField(
           controller: eventForm.controllerInitialDate,
           labelText: 'Fecha de inicio',
           hintText: 'aaaa-MMM-dd',
@@ -88,7 +116,7 @@ class _EventForm extends StatelessWidget {
 
           // controller: eventForm.getFrom(),
         ),
-        TextField(
+        CustomTextField(
           controller: eventForm.controllerEndDate,
           labelText: 'Fecha de termino',
           hintText: 'aaaa-MMM-dd',
@@ -102,13 +130,19 @@ class _EventForm extends StatelessWidget {
         SizedBox(height: size.height * 0.025),
         ElevatedButton(
             onPressed: () {
-              eventService.newEvent(EventModel(
-                title: eventForm.title!,
+              print('');
+              eventService.newEvent(Event(
+                patient: userProvider.userInfo.id,
+                professional: int.parse(eventForm.controller.text),
                 start: DateTime.parse(eventForm.controllerInitialDate.text),
                 end: DateTime.parse(eventForm.controllerEndDate.text),
-                description: eventForm.description!,
-                profile: userProvider.userInfo.id,
               ));
+              print(eventForm.controller.text);
+              // print(selectPro);
+              // print(userProvider.userInfo.id);
+
+              print(DateTime.parse(eventForm.controllerInitialDate.text));
+              print(DateTime.parse(eventForm.controllerEndDate.text));
               FocusScope.of(context).unfocus();
 
               // print(eventForm.title!);
@@ -122,120 +156,5 @@ class _EventForm extends StatelessWidget {
       ]),
     );
     //Validaciones y manejo de referencia KEY.
-  }
-
-  Future pickDate(BuildContext context) async {
-    final eventForm = Provider.of<EventFormProvider>(context, listen: false);
-    final initialDateRange = DateTimeRange(
-        start: DateTime.now(),
-        end: DateTime.now().add(const Duration(hours: 24 * 3)));
-
-    final newDateRanger = await showDateRangePicker(
-      context: context,
-      initialDateRange: eventForm.dateRange ?? initialDateRange,
-      firstDate: DateTime(2022),
-      lastDate: DateTime(DateTime.now().year + 5),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.dark(
-                  onPrimary: Colors.black, // selected text color
-                  onSurface: dateColor, // default text color
-                  primary: Colors.greenAccent // circle color
-                  ),
-              // dialogBackgroundColor: Colors.black54,
-              textButtonTheme: TextButtonThemeData(
-                  style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                          color: Colors.green[700],
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                          fontFamily: 'Quicksand'),
-                      primary:
-                          Colors.lightGreen[200], // color of button's letters
-                      backgroundColor: Colors.black54, // Background color
-                      shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(50))))),
-          child: child!,
-        );
-      },
-    );
-    if (newDateRanger == null) return;
-
-    eventForm.dateRange = newDateRanger;
-    eventForm.dateToString = newDateRanger;
-
-    print(eventForm.dateRange);
-  }
-}
-
-class TextField extends StatelessWidget {
-  final String labelText;
-  final String hintText;
-  final IconData icon;
-  final ValueChanged<String>? onChanged;
-
-  final Widget? suffixIcon;
-  final TextEditingController? controller;
-
-  const TextField({
-    required this.labelText,
-    required this.hintText,
-    required this.icon,
-    this.onChanged,
-    this.suffixIcon,
-    this.controller,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        colorScheme:
-            Theme.of(context).colorScheme.copyWith(primary: Colors.greenAccent),
-      ),
-      child: TextFormField(
-        // initialValue: ,
-        onChanged: onChanged,
-
-        // initialValue: loginForm.email,
-        controller: controller,
-        autofocus: false,
-        autocorrect: false,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-                color:
-                    Theme.of(context).colorScheme.secondary.withOpacity(0.5)),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-              width: 2,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ),
-          suffixIcon: suffixIcon,
-          labelText: labelText,
-          labelStyle: const TextStyle(color: Colors.grey, fontSize: 22),
-          hintText: hintText,
-          icon: Icon(
-            icon,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Escribe un título por favor.';
-          }
-          return null;
-        },
-      ),
-    );
   }
 }

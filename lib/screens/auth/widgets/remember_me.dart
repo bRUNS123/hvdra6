@@ -41,7 +41,6 @@ class _RememberMeState extends State<RememberMe> {
             height: 24,
             width: 24,
             child: Checkbox(
-              
               side: MaterialStateBorderSide.resolveWith(
                 (states) => BorderSide(
                   width: 2,
@@ -61,7 +60,6 @@ class _RememberMeState extends State<RememberMe> {
     final loginForm = Provider.of<LoginFormProvider>(context, listen: false);
     const storage = FlutterSecureStorage();
 
-    print("Load Email");
     try {
       final String? emailRemember = await storage.read(key: 'email');
       final String? boxRemember = await storage.read(key: 'rememberMe');
@@ -79,7 +77,6 @@ class _RememberMeState extends State<RememberMe> {
     final loginForm = Provider.of<LoginFormProvider>(context, listen: false);
     const storage = FlutterSecureStorage();
 
-    print("Handle Rember Me");
     _isChecked = value!;
     if (!_isChecked) {
       await storage.delete(key: 'email');

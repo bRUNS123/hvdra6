@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../providers/login_form_provider.dart';
 
-class RoundedInputField extends StatelessWidget {
-  const RoundedInputField({
+class CustomEmailField extends StatelessWidget {
+  final TextEditingController? controller;
+  final Function(String)? onChanged;
+
+  const CustomEmailField({
+    this.onChanged,
+    this.controller,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
-
     return TextFormField(
       // initialValue: ,
-      onChanged: (value) {
-        loginForm.email = value;
-      },
+      onChanged: onChanged, // (value) {     loginForm.email = value;     },
       // initialValue: loginForm.email,
-      controller: loginForm.controller,
+      controller: controller, //loginForm.controller
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(

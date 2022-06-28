@@ -4,39 +4,38 @@
 
 import 'dart:convert';
 
-class EventModel {
-  EventModel({
+class Event {
+  Event({
     this.profile,
     this.id,
-    required this.title,
+    this.title,
     this.professionalName,
     this.patientName,
     required this.start,
     required this.end,
-    required this.description,
+    this.description,
     this.company,
     this.professional,
-    this.patient,
+    required this.patient,
   });
 
   int? profile;
   int? id;
-  String title;
-  dynamic professionalName;
-  dynamic patientName;
+  String? title;
+  String? professionalName;
+  String? patientName;
   DateTime start;
   DateTime end;
-  String description;
-  dynamic company;
-  dynamic professional;
-  dynamic patient;
+  String? description;
+  String? company;
+  int? professional;
+  int? patient;
 
-  factory EventModel.fromJson(String str) =>
-      EventModel.fromMap(json.decode(str));
+  factory Event.fromJson(String str) => Event.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory EventModel.fromMap(Map<String, dynamic> json) => EventModel(
+  factory Event.fromMap(Map<String, dynamic> json) => Event(
         profile: json["profile"],
         id: json["id"],
         title: json["title"],
@@ -62,5 +61,49 @@ class EventModel {
         "company": company,
         "professional": professional,
         "patient": patient,
+      };
+}
+
+// To parse this JSON data, do
+//
+//     final editUpdate = editUpdateFromMap(jsonString);
+
+class EventUpdate {
+  EventUpdate({
+    required this.professional,
+    required this.start,
+    required this.end,
+  });
+
+  int professional;
+  DateTime start;
+  DateTime end;
+
+  EventUpdate copyWith({
+    int? professional,
+    DateTime? start,
+    DateTime? end,
+  }) =>
+      EventUpdate(
+        professional: professional ?? this.professional,
+        start: start ?? this.start,
+        end: end ?? this.end,
+      );
+
+  factory EventUpdate.fromJson(String str) =>
+      EventUpdate.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory EventUpdate.fromMap(Map<String, dynamic> json) => EventUpdate(
+        professional: json["professional"],
+        start: DateTime.parse(json["start"]),
+        end: DateTime.parse(json["end"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "professional": professional,
+        "start": start.toIso8601String(),
+        "end": end.toIso8601String(),
       };
 }

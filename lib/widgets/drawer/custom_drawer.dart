@@ -4,6 +4,7 @@ import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
+import '../../providers/providers.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -24,6 +25,9 @@ class CustomDrawer extends StatelessWidget {
                 'https://www.clipartmax.com/png/full/214-2143742_individuals-whatsapp-profile-picture-icon.png',
             onClicked: () {},
           ),
+          const SizedBox(
+            height: 10,
+          ),
           const BuildSearch(),
           BuildMenuItem(
             // text: S.of(context).community,
@@ -35,7 +39,12 @@ class CustomDrawer extends StatelessWidget {
             // text: S.of(context).favorites,
             text: 'Eventos',
             icon: (Icons.event_note_outlined),
-            onClicked: () => selectedPage(context, 1),
+            onClicked: () {
+              selectedPage(context, 1);
+              final eventProvider =
+                  Provider.of<EventFormProvider>(context, listen: false);
+              eventProvider.refreshEvents();
+            },
           ),
           BuildMenuItem(
             // text: S.of(context).announcement,

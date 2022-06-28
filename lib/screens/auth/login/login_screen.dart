@@ -62,7 +62,10 @@ class _LoginForm extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
-            const RoundedInputField(),
+            CustomEmailField(
+              controller: loginForm.controller,
+              onChanged: (value) => loginForm.email = value,
+            ),
             SizedBox(height: size.height * 0.035),
             const RoundedPasswordField(
               confirmPassword: false,
@@ -81,7 +84,7 @@ class _LoginForm extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pushReplacementNamed('home');
                 },
-                child: Text('Home'))
+                child: const Text('Home'))
           ],
         ));
   }
