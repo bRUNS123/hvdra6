@@ -17,7 +17,7 @@ class RouteGenerator {
       case 'event':
         return MaterialPageRoute(builder: (_) => const EventScreen());
       case 'newEvent':
-        return MaterialPageRoute(builder: (_) => const NewEventScreen());
+      // return MaterialPageRoute(builder: (_) => const NewEventScreen());
 
       default:
         _errorRoute();

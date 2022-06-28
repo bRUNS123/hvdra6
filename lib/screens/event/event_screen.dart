@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hydraflutter/providers/event_form_provider.dart';
-import 'package:hydraflutter/widgets/custom_appbar.dart';
+
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,6 @@ import '../../models/models.dart';
 import '../../services/services.dart';
 import '../../themes/colors.dart';
 import '../../widgets/widgets.dart';
-import 'widgets/pickdate.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({Key? key}) : super(key: key);
@@ -20,10 +20,143 @@ class EventScreen extends StatefulWidget {
 class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
+    final eventForm = Provider.of<EventFormProvider>(context);
+    final TextEditingController controllers = TextEditingController(text: '');
+    TextEditingController controllerInitialDate =
+        TextEditingController(text: '');
+    TextEditingController controllerEndDate = TextEditingController(text: '');
+
+    late List<String> autoCompleteData = ["1", "2", "3", "4", "5", "6"];
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed('newEvent');
+          showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                  insetPadding: const EdgeInsets.all(5),
+                  title: const Text('Nuevo Evento'),
+                  content: Builder(
+                    builder: (context) {
+                      final size = MediaQuery.of(context).size;
+                      return SizedBox(
+                          height: size.height * 0.35,
+                          width: 300,
+                          child: Form(
+                              key: eventForm.formKey,
+                              child: Column(children: [
+//https://www.youtube.com/watch?v=gDryje6oPrk&ab_channel=EasyApproach
+                                TypeAheadFormField<String?>(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Escribe un parametro por favor.';
+                                    }
+                                    return null;
+                                  },
+                                  onSuggestionSelected: (String? val) {
+                                    controllers.text = val!;
+                                  },
+                                  itemBuilder: (context, String? val) =>
+                                      ListTile(title: Text(val!)),
+                                  suggestionsCallback: (pattern) =>
+                                      autoCompleteData.where(
+                                    (val) => val
+                                        .toLowerCase()
+                                        .contains(pattern.toLowerCase()),
+                                  ),
+                                  getImmediateSuggestions: true,
+                                  hideSuggestionsOnKeyboardHide: true,
+                                  hideOnEmpty: false,
+                                  noItemsFoundBuilder: (context) =>
+                                      const Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text('No se ha encontrado.'),
+                                  ),
+                                  textFieldConfiguration:
+                                      TextFieldConfiguration(
+                                    decoration: InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                                .withOpacity(0.5)),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 2,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                      ),
+                                      labelText: 'Profesional',
+                                      labelStyle: const TextStyle(
+                                          color: Colors.grey, fontSize: 22),
+                                      hintText: 'nombre del profesional',
+                                      icon: Icon(
+                                        Icons.person,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                    ),
+                                    controller: controllers,
+                                    keyboardType: TextInputType.name,
+                                  ),
+                                ),
+                                CustomTextField(
+                                  controller: eventForm.controllerInitialDate,
+                                  labelText: 'Fecha de inicio',
+                                  hintText: 'aaaa-MMM-dd',
+                                  icon: Icons.calendar_month_outlined,
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        editDates(
+                                            context,
+                                            controllerInitialDate,
+                                            controllerEndDate);
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit_calendar_outlined)),
+
+                                  // controller: eventForm.getFrom(),
+                                ),
+                                CustomTextField(
+                                  controller: eventForm.controllerEndDate,
+                                  labelText: 'Fecha de termino',
+                                  hintText: 'aaaa-MMM-dd',
+                                  icon: Icons.insert_invitation_rounded,
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        editDates(
+                                            context,
+                                            controllerInitialDate,
+                                            controllerEndDate);
+                                      },
+                                      icon: const Icon(
+                                          Icons.edit_calendar_outlined)),
+                                ),
+                                SizedBox(height: size.height * 0.025),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      // eventService.newEvent(Event(
+                                      //   patient: userProvider.userInfo.id,
+                                      //   professional: int.parse(controllers.text),
+                                      //   start: DateTime.parse(eventForm.controllerInitialDate.text),
+                                      //   end: DateTime.parse(eventForm.controllerEndDate.text),
+                                      // ));
+                                      print(controllers.text);
+                                      // print(selectPro);
+                                      // print(userProvider.userInfo.id);
+
+                                      // eventForm.refreshEvents();
+                                      Navigator.pop;
+                                    },
+                                    child: const Text('Crear Evento')),
+                              ])));
+                    },
+                  ))); // Navigator.of(context).pushNamed('newEvent');
         },
         child: const Icon(Icons.add),
       ),
@@ -70,7 +203,6 @@ class _EventScreenState extends State<EventScreen> {
                         eventService.deleteEvent(events[i].id!);
                         eventProvider.refreshEvents();
                         //Metodo de eliminar0
-                        print(events[i].id);
 
                         //  Provider.of<ScanListProvider>(context, listen: false)
                         // .borrarScanPorId(scans[i].id);
@@ -107,6 +239,8 @@ class _EventScreenState extends State<EventScreen> {
         TextEditingController(text: DateFormat('yyyy-MM-dd').format(event.end));
     final eventForm = Provider.of<EventFormProvider>(context);
     final eventService = Provider.of<EventService>(context);
+    final TextEditingController controllers =
+        TextEditingController(text: event.professionalName!);
 
     return Column(
       children: [
@@ -128,33 +262,65 @@ class _EventScreenState extends State<EventScreen> {
                                   key: eventForm.editFormKey,
                                   child: Column(
                                     children: [
-                                      Autocomplete(
-                                        initialValue: TextEditingValue(
-                                            text: event.professionalName!),
-                                        optionsBuilder: (TextEditingValue
-                                            textEditingValue) {
-                                          {
-                                            return autoCompleteData.where(
-                                                (word) => word
-                                                    .toLowerCase()
-                                                    .contains(textEditingValue
-                                                        .text
-                                                        .toLowerCase()));
+                                      TypeAheadFormField<String?>(
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Escribe un parametro por favor.';
                                           }
+                                          return null;
                                         },
-                                        onSelected: (String selectString) {},
-                                        fieldViewBuilder: (context, controller,
-                                            focusNode, onEdittingComplete) {
-                                          return CustomTextField(
-                                              onEditingComplete:
-                                                  onEdittingComplete,
-                                              focusNode: focusNode,
-                                              controller: controller,
-                                              labelText: 'Profesional',
-                                              hintText:
-                                                  'nombre del profesional',
-                                              icon: Icons.person);
+                                        onSuggestionSelected: (String? val) {
+                                          controllers.text = val!;
                                         },
+                                        itemBuilder: (context, String? val) =>
+                                            ListTile(title: Text(val!)),
+                                        suggestionsCallback: (pattern) =>
+                                            autoCompleteData.where(
+                                          (val) => val
+                                              .toLowerCase()
+                                              .contains(pattern.toLowerCase()),
+                                        ),
+                                        getImmediateSuggestions: true,
+                                        hideSuggestionsOnKeyboardHide: false,
+                                        hideOnEmpty: false,
+                                        noItemsFoundBuilder: (context) =>
+                                            const Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text('No se ha encontrado.'),
+                                        ),
+                                        textFieldConfiguration:
+                                            TextFieldConfiguration(
+                                          decoration: InputDecoration(
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary
+                                                      .withOpacity(0.5)),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                width: 2,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            labelText: 'Profesional',
+                                            labelStyle: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 22),
+                                            hintText: 'nombre del profesional',
+                                            icon: Icon(
+                                              Icons.person,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                          ),
+                                          controller: controllers,
+                                          keyboardType: TextInputType.name,
+                                        ),
                                       ),
                                       CustomTextField(
                                         controller: controllerEditInitialDate,
@@ -310,10 +476,68 @@ Future editDate(
       );
     },
   );
+
   if (newDateRanger == null) return;
 
   controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
   controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+}
 
-  print(initialDate);
+Future editDates(
+  BuildContext context,
+  TextEditingController? controller,
+  TextEditingController? controllerEnd,
+) async {
+  // var initialDate = DateTimeRange(
+  //     start: DateTime.now(), end: DateTime(DateTime.now().day + 5));
+
+  final eventForm = Provider.of<EventFormProvider>(context, listen: false);
+
+  final newDateRanger = await showDateRangePicker(
+    context: context,
+    initialDateRange: DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now().add(Duration(days: 7)),
+    ),
+    firstDate: DateTime(2022),
+    lastDate: DateTime(DateTime.now().year + 5),
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+                onPrimary: Colors.black, // selected text color
+                onSurface: dateColor, // default text color
+                primary: Colors.greenAccent // circle color
+                ),
+            // dialogBackgroundColor: Colors.black54,
+            textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                    textStyle: TextStyle(
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        fontFamily: 'Quicksand'),
+                    primary:
+                        Colors.lightGreen[200], // color of button's letters
+                    backgroundColor: Colors.black54, // Background color
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(50))))),
+        child: child!,
+      );
+    },
+  );
+
+  if (newDateRanger == null) return;
+
+  controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
+  controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+  eventForm.controllerInitialDate.text =
+      DateFormat('yyyy-MM-dd').format(newDateRanger.start);
+
+  eventForm.controllerEndDate.text =
+      DateFormat('yyyy-MM-dd').format(newDateRanger.end);
 }

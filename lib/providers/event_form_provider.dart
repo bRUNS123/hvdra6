@@ -17,9 +17,10 @@ class EventFormProvider extends ChangeNotifier {
   TextEditingController controllerEditInitialDate = TextEditingController();
   TextEditingController controllerEditEndDate = TextEditingController();
 
-  TextEditingController controllerInitialDate = TextEditingController();
-  TextEditingController controllerEndDate = TextEditingController();
+  TextEditingController controllerInitialDate = TextEditingController(text: '');
+  TextEditingController controllerEndDate = TextEditingController(text: '');
   TextEditingController controller = TextEditingController();
+  TextEditingController controllers = TextEditingController(text: '');
 
   final Object? selectString = {};
   // TextEditingController controllerComplete = TextEditingController();
