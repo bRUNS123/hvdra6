@@ -14,9 +14,6 @@ class EventFormProvider extends ChangeNotifier {
   DateTimeRange? dateRange;
   DateTimeRange? dateEditRange;
 
-  TextEditingController controllerEditInitialDate = TextEditingController();
-  TextEditingController controllerEditEndDate = TextEditingController();
-
   TextEditingController controllerInitialDate = TextEditingController(text: '');
   TextEditingController controllerEndDate = TextEditingController(text: '');
   TextEditingController controller = TextEditingController();
@@ -24,14 +21,6 @@ class EventFormProvider extends ChangeNotifier {
 
   final Object? selectString = {};
   // TextEditingController controllerComplete = TextEditingController();
-
-  set dateEditToString(DateTimeRange dateEditRange) {
-    controllerEditInitialDate.text =
-        DateFormat('yyyy-MM-dd').format(dateEditRange.start);
-    controllerEditEndDate.text =
-        DateFormat('yyyy-MM-dd').format(dateEditRange.end);
-    notifyListeners();
-  }
 
   set dateToString(DateTimeRange dateRange) {
     controllerInitialDate.text =

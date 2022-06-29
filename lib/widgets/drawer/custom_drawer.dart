@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hydraflutter/services/auth_service.dart';
+
 import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../generated/l10n.dart';
 import '../../providers/providers.dart';
+import '../../services/services.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<AuthService>(context, listen: false);
+    final eventService = Provider.of<EventService>(context, listen: false);
+
     return Drawer(
         child: Material(
       color: Theme.of(context).colorScheme.primary,
@@ -44,6 +47,7 @@ class CustomDrawer extends StatelessWidget {
               final eventProvider =
                   Provider.of<EventFormProvider>(context, listen: false);
               eventProvider.refreshEvents();
+              eventService.getProfessionals();
             },
           ),
           BuildMenuItem(

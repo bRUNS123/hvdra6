@@ -104,4 +104,42 @@ class EventService extends ChangeNotifier {
 
     return '';
   }
+
+  Future<Map<String, String>> getProfessionals() async {
+    final String? access = await storage.read(key: 'access');
+
+    final queryParameters = {
+      'is_professional': 'true',
+    };
+    final headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $access"
+    };
+    final url = Uri.http(_baseURL, '/profiles/', queryParameters);
+
+    try {
+      final resp = await http.get(url, headers: headers);
+      if (resp.statusCode == 200) {
+        final decodeResp = await json.decode(resp.body);
+        print(decodeResp);
+        var listEvent = <Event>[];
+        // for (var eventModel in decodeResp) {
+        //   var e1 = Event.fromMap(eventModel);
+        //   listEvent.add(e1);
+        // }
+        // print(resp.body);
+
+        return {};
+      }
+      return {};
+    } catch (e) {
+      print(e);
+    }
+    return {};
+
+    // final List<Map<String, dynamic>> eventMap = EventModel.fromJson(decodeResp)
+    // print(resultsMap);
+
+    // final EventModel eventDatos = EventModel.fromJson(resp.body);
+  }
 }

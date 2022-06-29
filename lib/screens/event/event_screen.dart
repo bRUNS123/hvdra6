@@ -106,7 +106,7 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                 ),
                                 CustomTextField(
-                                  controller: eventForm.controllerInitialDate,
+                                  controller: controllerInitialDate,
                                   labelText: 'Fecha de inicio',
                                   hintText: 'aaaa-MMM-dd',
                                   icon: Icons.calendar_month_outlined,
@@ -123,7 +123,7 @@ class _EventScreenState extends State<EventScreen> {
                                   // controller: eventForm.getFrom(),
                                 ),
                                 CustomTextField(
-                                  controller: eventForm.controllerEndDate,
+                                  controller: controllerEndDate,
                                   labelText: 'Fecha de termino',
                                   hintText: 'aaaa-MMM-dd',
                                   icon: Icons.insert_invitation_rounded,
@@ -139,19 +139,36 @@ class _EventScreenState extends State<EventScreen> {
                                 ),
                                 SizedBox(height: size.height * 0.025),
                                 ElevatedButton(
-                                    onPressed: () {
-                                      // eventService.newEvent(Event(
-                                      //   patient: userProvider.userInfo.id,
-                                      //   professional: int.parse(controllers.text),
-                                      //   start: DateTime.parse(eventForm.controllerInitialDate.text),
-                                      //   end: DateTime.parse(eventForm.controllerEndDate.text),
-                                      // ));
-                                      print(controllers.text);
-                                      // print(selectPro);
-                                      // print(userProvider.userInfo.id);
+                                    onPressed: () async {
+                                      final eventService =
+                                          Provider.of<EventService>(context,
+                                              listen: false);
+                                      final eventProvider =
+                                          Provider.of<EventFormProvider>(
+                                              context,
+                                              listen: false);
+                                      final userProvider =
+                                          Provider.of<AuthService>(context,
+                                              listen: false);
+                                      await eventService.newEvent(Event(
+                                        patient: userProvider.userInfo.id,
+                                        professional:
+                                            int.parse(controllers.text),
+                                        start: DateTime.parse(
+                                            controllerInitialDate.text),
+                                        end: DateTime.parse(
+                                            controllerEndDate.text),
+                                      ));
 
-                                      // eventForm.refreshEvents();
-                                      Navigator.pop;
+                                      await eventProvider.refreshEvents();
+                                      Navigator.pop(context);
+
+                                      // print(userProvider.userInfo.id);
+                                      // print(controllers.text);
+                                      // print(DateTime.parse(
+                                      //     controllerInitialDate.text));
+                                      // print(DateTime.parse(
+                                      //     controllerEndDate.text));
                                     },
                                     child: const Text('Crear Evento')),
                               ])));
@@ -184,49 +201,55 @@ class _EventScreenState extends State<EventScreen> {
     final size = MediaQuery.of(context).size;
     final eventProvider = Provider.of<EventFormProvider>(context);
 
-    return FutureBuilder(
-        future: eventProvider.getEventsById(),
-        builder: (_, AsyncSnapshot<List<Event>> snapshot) {
-          if (snapshot.hasData) {
-            final events = snapshot.data;
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: events!.length,
-                itemBuilder: (_, int i) {
-                  return Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.endToStart,
-                      onDismissed: (DismissDirection direction) {
-                        final eventService =
-                            Provider.of<EventService>(context, listen: false);
+    return RefreshIndicator(
+      strokeWidth: 3,
+      color: Theme.of(context).colorScheme.secondary,
+      triggerMode: RefreshIndicatorTriggerMode.anywhere,
+      onRefresh: eventProvider.refreshEvents,
+      child: FutureBuilder(
+          future: eventProvider.getEventsById(),
+          builder: (_, AsyncSnapshot<List<Event>> snapshot) {
+            if (snapshot.hasData) {
+              final events = snapshot.data;
+              return ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: events!.length,
+                  itemBuilder: (_, int i) {
+                    return Dismissible(
+                        key: UniqueKey(),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (DismissDirection direction) {
+                          final eventService =
+                              Provider.of<EventService>(context, listen: false);
 
-                        eventService.deleteEvent(events[i].id!);
-                        eventProvider.refreshEvents();
-                        //Metodo de eliminar0
+                          eventService.deleteEvent(events[i].id!);
+                          eventProvider.refreshEvents();
+                          //Metodo de eliminar0
 
-                        //  Provider.of<ScanListProvider>(context, listen: false)
-                        // .borrarScanPorId(scans[i].id);
-                      },
-                      background: Stack(
-                        children: [
-                          Container(
-                            color: Colors.red.withOpacity(0.7),
-                          ),
-                          Positioned(
-                              left: size.width * 0.8,
-                              top: size.height * 0.01,
-                              child: const Icon(
-                                Icons.delete,
-                                size: 50,
-                              )),
-                        ],
-                      ),
-                      child: _card(events[i]));
-                });
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+                          //  Provider.of<ScanListProvider>(context, listen: false)
+                          // .borrarScanPorId(scans[i].id);
+                        },
+                        background: Stack(
+                          children: [
+                            Container(
+                              color: Colors.red.withOpacity(0.7),
+                            ),
+                            Positioned(
+                                left: size.width * 0.8,
+                                top: size.height * 0.01,
+                                child: const Icon(
+                                  Icons.delete,
+                                  size: 50,
+                                )),
+                          ],
+                        ),
+                        child: _card(events[i]));
+                  });
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
+    );
   }
 
   Widget _card(Event event) {
@@ -367,6 +390,12 @@ class _EventScreenState extends State<EventScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   ElevatedButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Cancelar')),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
                                       onPressed: () {
                                         final eventProvider =
                                             Provider.of<EventFormProvider>(
@@ -380,18 +409,12 @@ class _EventScreenState extends State<EventScreen> {
                                                         .text),
                                                 end: DateTime.parse(
                                                     controllerEditEndDate.text),
-                                                professional:
-                                                    event.professional!));
-                                        Navigator.pop(context);
+                                                professional: int.parse(
+                                                    controllers.text)));
                                         eventProvider.refreshEvents();
+                                        Navigator.pop(context);
                                       },
                                       child: const Text('Guardar')),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  ElevatedButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Cancelar')),
                                 ],
                               ),
                             )
@@ -535,9 +558,9 @@ Future editDates(
 
   controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
   controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
-  eventForm.controllerInitialDate.text =
-      DateFormat('yyyy-MM-dd').format(newDateRanger.start);
+  // eventForm.controllerInitialDate.text =
+  //     DateFormat('yyyy-MM-dd').format(newDateRanger.start);
 
-  eventForm.controllerEndDate.text =
-      DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+  // eventForm.controllerEndDate.text =
+  //     DateFormat('yyyy-MM-dd').format(newDateRanger.end);
 }
