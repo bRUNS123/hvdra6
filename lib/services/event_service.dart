@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hydraflutter/models/getProfessional_model.dart';
 
 import '../models/models.dart';
 
@@ -28,6 +29,8 @@ class EventService extends ChangeNotifier {
   Future<List<Event>> getEventsById() async {
     final String? access = await storage.read(key: 'access');
     const int userId = 1;
+
+    //Requerir id
 
     final queryParameters = {
       'patient_id': '1',
@@ -105,7 +108,7 @@ class EventService extends ChangeNotifier {
     return '';
   }
 
-  Future<Map<String, String>> getProfessionals() async {
+  Future<List<GetProfessionalList>> getProfessionals(String query) async {
     final String? access = await storage.read(key: 'access');
 
     final queryParameters = {
@@ -120,22 +123,22 @@ class EventService extends ChangeNotifier {
     try {
       final resp = await http.get(url, headers: headers);
       if (resp.statusCode == 200) {
-        final decodeResp = await json.decode(resp.body);
-        print(decodeResp);
-        var listEvent = <Event>[];
-        // for (var eventModel in decodeResp) {
-        //   var e1 = Event.fromMap(eventModel);
-        //   listEvent.add(e1);
-        // }
-        // print(resp.body);
-
-        return {};
+        final List profesionales = json.decode(resp.body);
+        return profesionales
+            .map((json) => GetProfessionalList.fromJson(json))
+            .where((profesionales) {
+          // final id = profesionales.id;
+          final nameLower = profesionales.fullName!.toLowerCase();
+          final queryLower = query.toLowerCase();
+          return nameLower.contains(queryLower);
+        }).toList();
+      } else {
+        throw Exception();
       }
-      return {};
     } catch (e) {
       print(e);
     }
-    return {};
+    return [];
 
     // final List<Map<String, dynamic>> eventMap = EventModel.fromJson(decodeResp)
     // print(resultsMap);

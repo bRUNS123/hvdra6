@@ -79,9 +79,7 @@ class _EditUserForm extends StatelessWidget {
           icon: Icons.label,
           // initialValue: userProvider.userInfo.firstName ?? '',
           controller: nameController,
-          onChanged: (value) {
-            // eventForm.title = value;
-          },
+          onChanged: (value) {},
         ),
 
         CustomTextField(
@@ -142,6 +140,8 @@ class _EditUserForm extends StatelessWidget {
                 rut: rutController.text,
                 phoneNumber: phoneController.text,
               ));
+
+              userProvider.usernameInfo(emailController.text);
 
               // userService.
               // eventService.newEvent(EventModel(

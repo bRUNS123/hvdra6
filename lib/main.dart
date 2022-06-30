@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       initialRoute: 'checking',
       onGenerateRoute: _routeGenerator.onGenerateRoute,
       theme: context.watch<ThemeBloc>().state.theme,
-      home: const LoginScreen(),
+      // home: const LoginScreen(),
       supportedLocales: S.delegate.supportedLocales,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

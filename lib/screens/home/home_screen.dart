@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     final titulos = [
-      S.of(context).menu,
+      S.of(context).news,
       S.of(context).chat,
       S.of(context).hydra,
       S.of(context).settings,

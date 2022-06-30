@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../bloc/blocs.dart';
 import '../../generated/l10n.dart';
 import '../../providers/providers.dart';
 import '../../services/services.dart';
@@ -13,7 +14,6 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<AuthService>(context, listen: false);
-    final eventService = Provider.of<EventService>(context, listen: false);
 
     return Drawer(
         child: Material(
@@ -26,7 +26,10 @@ class CustomDrawer extends StatelessWidget {
             email: userProvider.userInfo.email ?? '',
             urlImage:
                 'https://www.clipartmax.com/png/full/214-2143742_individuals-whatsapp-profile-picture-icon.png',
-            onClicked: () {},
+            onClicked: () {
+              Navigator.of(context).pop();
+              context.read<NavigationBarBloc>().add(const ChangeIndexEvent(4));
+            },
           ),
           const SizedBox(
             height: 10,
@@ -34,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
           const BuildSearch(),
           BuildMenuItem(
             // text: S.of(context).community,
-            text: 'Menu',
+            text: 'Comunidad',
             icon: (Icons.people),
             onClicked: () => selectedPage(context, 0),
           ),
@@ -47,24 +50,23 @@ class CustomDrawer extends StatelessWidget {
               final eventProvider =
                   Provider.of<EventFormProvider>(context, listen: false);
               eventProvider.refreshEvents();
-              eventService.getProfessionals();
             },
           ),
           BuildMenuItem(
             // text: S.of(context).announcement,
-            text: 'Menu',
+            text: 'Anuncios',
             icon: (Icons.new_releases_rounded),
             onClicked: () => selectedPage(context, 2),
           ),
           BuildMenuItem(
             // text: S.of(context).files,
-            text: 'Menu',
+            text: 'Documentos',
             icon: (Icons.file_copy_sharp),
             onClicked: () => selectedPage(context, 3),
           ),
           BuildMenuItem(
             // text: S.of(context).users,
-            text: 'Menu',
+            text: 'Profesionales',
             icon: (Icons.supervised_user_circle_sharp),
             onClicked: () => selectedPage(context, 4),
           ),
@@ -73,7 +75,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           BuildMenuItem(
             // text: S.of(context).notifications,
-            text: 'Menu',
+            text: 'Notificaciones',
             icon: (Icons.notifications_outlined),
             onClicked: () => selectedPage(context, 5),
           ),
@@ -84,7 +86,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           BuildMenuItem(
             // text: S.of(context).logout,
-            text: 'Menu',
+            text: 'Cerrar Sesión',
             icon: (Icons.logout),
             onClicked: () => selectedPage(context, 7),
           ),
@@ -95,6 +97,7 @@ class CustomDrawer extends StatelessWidget {
 }
 
 void selectedPage(BuildContext context, int index) {
+  final authService = Provider.of<AuthService>(context, listen: false);
   Navigator.of(context).pop();
   switch (index) {
     case 0:
@@ -105,7 +108,14 @@ void selectedPage(BuildContext context, int index) {
       Navigator.of(context).pushNamed('event');
       break;
     case 4:
-      // Navigator.of(context).pushNamed(UsersScreen.routeName);
+      break;
+    // Navigator.of(context).pushNamed(UsersScreen.routeName);
+    case 6:
+      context.read<NavigationBarBloc>().add(const ChangeIndexEvent(3));
+      break;
+    case 7:
+      authService.logout();
+      Navigator.pushReplacementNamed(context, 'login');
       break;
   }
 }

@@ -16,8 +16,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const EditProfileScreen());
       case 'event':
         return MaterialPageRoute(builder: (_) => const EventScreen());
-      case 'newEvent':
-      // return MaterialPageRoute(builder: (_) => const NewEventScreen());
+
+      case 'settings':
+        return MaterialPageRoute(builder: (_) => const SettingsScreen());
 
       default:
         _errorRoute();

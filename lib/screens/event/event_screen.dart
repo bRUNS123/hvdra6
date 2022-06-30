@@ -5,6 +5,7 @@ import 'package:hydraflutter/providers/event_form_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/getProfessional_model.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import '../../themes/colors.dart';
@@ -18,15 +19,19 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
+  late int profesionalId;
+  final List<GetProfessionalList> professionalList = [];
   @override
   Widget build(BuildContext context) {
+    final eventService = Provider.of<EventService>(context, listen: false);
     final eventForm = Provider.of<EventFormProvider>(context);
+
     final TextEditingController controllers = TextEditingController(text: '');
     TextEditingController controllerInitialDate =
         TextEditingController(text: '');
     TextEditingController controllerEndDate = TextEditingController(text: '');
 
-    late List<String> autoCompleteData = ["1", "2", "3", "4", "5", "6"];
+    // List<Profesionales> profesionales;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -45,27 +50,42 @@ class _EventScreenState extends State<EventScreen> {
                           child: Form(
                               key: eventForm.formKey,
                               child: Column(children: [
-//https://www.youtube.com/watch?v=gDryje6oPrk&ab_channel=EasyApproach
-                                TypeAheadFormField<String?>(
+                                TypeAheadFormField<GetProfessionalList?>(
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Escribe un parametro por favor.';
                                     }
                                     return null;
                                   },
-                                  onSuggestionSelected: (String? val) {
-                                    controllers.text = val!;
+                                  onSuggestionSelected:
+                                      (GetProfessionalList? suggestion) {
+                                    final profesional = suggestion!;
+                                    controllers.text = profesional.fullName!;
+
+                                    // final idProfesional = profesional.id;
+                                    print(profesional.fullName);
+                                    profesionalId = profesional.id!;
+
+                                    // print(controllers.text);
+                                    // print(profesional.id!);
+                                    // ScaffoldMessenger.of(context)
+                                    //   ..removeCurrentSnackBar()
+                                    //   ..showSnackBar(SnackBar(
+                                    //       content: Text(
+                                    //           'Profesional: ${profesional.fullName}')));
                                   },
-                                  itemBuilder: (context, String? val) =>
-                                      ListTile(title: Text(val!)),
-                                  suggestionsCallback: (pattern) =>
-                                      autoCompleteData.where(
-                                    (val) => val
-                                        .toLowerCase()
-                                        .contains(pattern.toLowerCase()),
-                                  ),
+                                  itemBuilder: (context,
+                                      GetProfessionalList? suggestion) {
+                                    final profesional = suggestion!;
+                                    return ListTile(
+                                        title: Text(profesional.fullName!));
+                                  },
+                                  debounceDuration:
+                                      const Duration(milliseconds: 300),
+                                  suggestionsCallback:
+                                      eventService.getProfessionals,
                                   getImmediateSuggestions: true,
-                                  hideSuggestionsOnKeyboardHide: true,
+                                  hideSuggestionsOnKeyboardHide: false,
                                   hideOnEmpty: false,
                                   noItemsFoundBuilder: (context) =>
                                       const Padding(
@@ -152,8 +172,7 @@ class _EventScreenState extends State<EventScreen> {
                                               listen: false);
                                       await eventService.newEvent(Event(
                                         patient: userProvider.userInfo.id,
-                                        professional:
-                                            int.parse(controllers.text),
+                                        professional: profesionalId,
                                         start: DateTime.parse(
                                             controllerInitialDate.text),
                                         end: DateTime.parse(
@@ -192,7 +211,11 @@ class _EventScreenState extends State<EventScreen> {
       body: Column(children: [
         Flexible(
           child: _listEvents(),
-        )
+        ),
+        // SizedBox(
+        //     height: 400,
+        //     width: double.infinity,
+        //     child: listProfesionales(context))
       ]),
     );
   }
@@ -254,7 +277,6 @@ class _EventScreenState extends State<EventScreen> {
 
   Widget _card(Event event) {
     //Deberia estar la lista de profesionales.
-    late List<String> autoCompleteData = <String>["1", "2", "3", "4", "5", "6"];
 
     TextEditingController controllerEditInitialDate = TextEditingController(
         text: DateFormat('yyyy-MM-dd').format(event.start));
@@ -262,6 +284,7 @@ class _EventScreenState extends State<EventScreen> {
         TextEditingController(text: DateFormat('yyyy-MM-dd').format(event.end));
     final eventForm = Provider.of<EventFormProvider>(context);
     final eventService = Provider.of<EventService>(context);
+
     final TextEditingController controllers =
         TextEditingController(text: event.professionalName!);
 
@@ -285,24 +308,42 @@ class _EventScreenState extends State<EventScreen> {
                                   key: eventForm.editFormKey,
                                   child: Column(
                                     children: [
-                                      TypeAheadFormField<String?>(
+                                      TypeAheadFormField<GetProfessionalList?>(
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Escribe un parametro por favor.';
                                           }
                                           return null;
                                         },
-                                        onSuggestionSelected: (String? val) {
-                                          controllers.text = val!;
+                                        onSuggestionSelected:
+                                            (GetProfessionalList? suggestion) {
+                                          final profesional = suggestion!;
+                                          controllers.text =
+                                              profesional.fullName!;
+
+                                          // final idProfesional = profesional.id;
+                                          print(profesional.fullName);
+                                          profesionalId = profesional.id!;
+
+                                          // print(controllers.text);
+                                          // print(profesional.id!);
+                                          // ScaffoldMessenger.of(context)
+                                          //   ..removeCurrentSnackBar()
+                                          //   ..showSnackBar(SnackBar(
+                                          //       content: Text(
+                                          //           'Profesional: ${profesional.fullName}')));
                                         },
-                                        itemBuilder: (context, String? val) =>
-                                            ListTile(title: Text(val!)),
-                                        suggestionsCallback: (pattern) =>
-                                            autoCompleteData.where(
-                                          (val) => val
-                                              .toLowerCase()
-                                              .contains(pattern.toLowerCase()),
-                                        ),
+                                        itemBuilder: (context,
+                                            GetProfessionalList? suggestion) {
+                                          final profesional = suggestion!;
+                                          return ListTile(
+                                              title:
+                                                  Text(profesional.fullName!));
+                                        },
+                                        debounceDuration:
+                                            const Duration(milliseconds: 300),
+                                        suggestionsCallback:
+                                            eventService.getProfessionals,
                                         getImmediateSuggestions: true,
                                         hideSuggestionsOnKeyboardHide: false,
                                         hideOnEmpty: false,
@@ -345,6 +386,10 @@ class _EventScreenState extends State<EventScreen> {
                                           keyboardType: TextInputType.name,
                                         ),
                                       ),
+                                      // const SizedBox(
+                                      //   height: 30,
+                                      // ),
+                                      // listProfesionales(context),
                                       CustomTextField(
                                         controller: controllerEditInitialDate,
                                         labelText: 'Fecha de inicio',
@@ -397,6 +442,7 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                   ElevatedButton(
                                       onPressed: () {
+                                        print(profesionalId);
                                         final eventProvider =
                                             Provider.of<EventFormProvider>(
                                                 context,
@@ -409,8 +455,7 @@ class _EventScreenState extends State<EventScreen> {
                                                         .text),
                                                 end: DateTime.parse(
                                                     controllerEditEndDate.text),
-                                                professional: int.parse(
-                                                    controllers.text)));
+                                                professional: (profesionalId)));
                                         eventProvider.refreshEvents();
                                         Navigator.pop(context);
                                       },
@@ -455,112 +500,110 @@ class _EventScreenState extends State<EventScreen> {
       ],
     );
   }
-}
 
-Future editDate(
-  BuildContext context,
-  Event event,
-  TextEditingController? controller,
-  TextEditingController? controllerEnd,
-) async {
-  var initialDate = DateTimeRange(start: event.start, end: event.end);
+  Future editDate(
+    BuildContext context,
+    Event event,
+    TextEditingController? controller,
+    TextEditingController? controllerEnd,
+  ) async {
+    var initialDate = DateTimeRange(start: event.start, end: event.end);
 
-  final newDateRanger = await showDateRangePicker(
-    context: context,
-    initialDateRange: initialDate,
-    firstDate: DateTime(2022),
-    lastDate: DateTime(DateTime.now().year + 5),
-    builder: (context, child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-                onPrimary: Colors.black, // selected text color
-                onSurface: dateColor, // default text color
-                primary: Colors.greenAccent // circle color
-                ),
-            // dialogBackgroundColor: Colors.black54,
-            textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                    textStyle: TextStyle(
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                        fontFamily: 'Quicksand'),
-                    primary:
-                        Colors.lightGreen[200], // color of button's letters
-                    backgroundColor: Colors.black54, // Background color
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(50))))),
-        child: child!,
-      );
-    },
-  );
+    final newDateRanger = await showDateRangePicker(
+      context: context,
+      initialDateRange: initialDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(DateTime.now().year + 5),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.dark(
+                  onPrimary: Colors.black, // selected text color
+                  onSurface: dateColor, // default text color
+                  primary: Colors.greenAccent // circle color
+                  ),
+              // dialogBackgroundColor: Colors.black54,
+              textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                      textStyle: TextStyle(
+                          color: Colors.green[700],
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                          fontFamily: 'Quicksand'),
+                      primary:
+                          Colors.lightGreen[200], // color of button's letters
+                      backgroundColor: Colors.black54, // Background color
+                      shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(50))))),
+          child: child!,
+        );
+      },
+    );
 
-  if (newDateRanger == null) return;
+    if (newDateRanger == null) return;
 
-  controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
-  controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
-}
+    controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
+    controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+  }
 
-Future editDates(
-  BuildContext context,
-  TextEditingController? controller,
-  TextEditingController? controllerEnd,
-) async {
-  // var initialDate = DateTimeRange(
-  //     start: DateTime.now(), end: DateTime(DateTime.now().day + 5));
+  Future editDates(
+    BuildContext context,
+    TextEditingController? controller,
+    TextEditingController? controllerEnd,
+  ) async {
+    // var initialDate = DateTimeRange(
+    //     start: DateTime.now(), end: DateTime(DateTime.now().day + 5));
 
-  final eventForm = Provider.of<EventFormProvider>(context, listen: false);
+    final newDateRanger = await showDateRangePicker(
+      context: context,
+      initialDateRange: DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now().add(Duration(days: 7)),
+      ),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(DateTime.now().year + 5),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.dark(
+                  onPrimary: Colors.black, // selected text color
+                  onSurface: dateColor, // default text color
+                  primary: Colors.greenAccent // circle color
+                  ),
+              // dialogBackgroundColor: Colors.black54,
+              textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                      textStyle: TextStyle(
+                          color: Colors.green[700],
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                          fontFamily: 'Quicksand'),
+                      primary:
+                          Colors.lightGreen[200], // color of button's letters
+                      backgroundColor: Colors.black54, // Background color
+                      shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(50))))),
+          child: child!,
+        );
+      },
+    );
 
-  final newDateRanger = await showDateRangePicker(
-    context: context,
-    initialDateRange: DateTimeRange(
-      start: DateTime.now(),
-      end: DateTime.now().add(Duration(days: 7)),
-    ),
-    firstDate: DateTime(2022),
-    lastDate: DateTime(DateTime.now().year + 5),
-    builder: (context, child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-                onPrimary: Colors.black, // selected text color
-                onSurface: dateColor, // default text color
-                primary: Colors.greenAccent // circle color
-                ),
-            // dialogBackgroundColor: Colors.black54,
-            textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                    textStyle: TextStyle(
-                        color: Colors.green[700],
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                        fontFamily: 'Quicksand'),
-                    primary:
-                        Colors.lightGreen[200], // color of button's letters
-                    backgroundColor: Colors.black54, // Background color
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(50))))),
-        child: child!,
-      );
-    },
-  );
+    if (newDateRanger == null) return;
 
-  if (newDateRanger == null) return;
+    controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
+    controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+    // eventForm.controllerInitialDate.text =
+    //     DateFormat('yyyy-MM-dd').format(newDateRanger.start);
 
-  controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
-  controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
-  // eventForm.controllerInitialDate.text =
-  //     DateFormat('yyyy-MM-dd').format(newDateRanger.start);
-
-  // eventForm.controllerEndDate.text =
-  //     DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+    // eventForm.controllerEndDate.text =
+    //     DateFormat('yyyy-MM-dd').format(newDateRanger.end);
+  }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydraflutter/bloc/blocs.dart';
 
 class DrawHeader extends StatelessWidget {
   const DrawHeader({
@@ -9,7 +11,8 @@ class DrawHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // context.read<NavigationBarBloc>().add(const ChangeIndexEvent(2));
+        Navigator.of(context).pop();
+        context.read<NavigationBarBloc>().add(const ChangeIndexEvent(2));
         // Navigator.of(context).pushReplacementNamed(MainApp.routeName);
       },
       splashColor: Colors.green,
