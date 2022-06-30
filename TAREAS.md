@@ -1,5 +1,3 @@
-Metodo CopyWith para que no tome todos los valores y los haga null.
-Get Professionals
-Validar Eventos, Fechas
+
 <!-- Refrescar pagina Eventos. -->
 
