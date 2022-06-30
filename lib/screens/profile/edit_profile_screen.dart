@@ -6,6 +6,7 @@ import 'package:hydraflutter/screens/screens.dart';
 import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/providers.dart';
 import '../../services/services.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -30,9 +31,8 @@ class EditProfileScreen extends StatelessWidget {
                     const _EditUserForm(),
                     // MultiProvider(providers: [
                     //   ChangeNotifierProvider(
-                    //     create: (_) => UserFormProvider(),
-                    //     child: const
-                    //     _EditUserForm(),
+                    //     create: (_) => AuthService(),
+                    //     child: const _EditUserForm(),
                     //   ),
                     // ]),
                     SizedBox(height: size.height * 0.04),
@@ -52,7 +52,8 @@ class _EditUserForm extends StatelessWidget {
   Widget build(BuildContext context) {
     // final userForm = Provider.of<UserFormProvider>(context);
 
-    final userProvider = Provider.of<AuthService>(context, listen: false);
+    final userProvider = Provider.of<AuthService>(context);
+    final focusScope = FocusScope.of(context);
 
     TextEditingController nameController =
         TextEditingController(text: userProvider.userInfo.firstName ?? '');
@@ -129,10 +130,10 @@ class _EditUserForm extends StatelessWidget {
 
         SizedBox(height: size.height * 0.025),
         ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // userProv
 
-              userProvider.userUpdate(UserUpdate(
+              await userProvider.userUpdate(UserUpdate(
                 firstName: nameController.text,
                 lastName: lastNameController.text,
                 secondLastName: secondLastNameController.text,
@@ -143,21 +144,7 @@ class _EditUserForm extends StatelessWidget {
 
               userProvider.usernameInfo(emailController.text);
 
-              // userService.
-              // eventService.newEvent(EventModel(
-              //   title: eventForm.title!,
-              //   start: DateTime.parse(eventForm.controllerInitialDate.text),
-              //   end: DateTime.parse(eventForm.controllerEndDate.text),
-              //   description: eventForm.description!,
-              //   profile: userProvider.userInfo.id,
-
-              FocusScope.of(context).unfocus();
-
-              // print(eventForm.title!);
-              // print(DateTime.parse(eventForm.controllerInitialDate.text));
-              // print(DateTime.parse(eventForm.controllerEndDate.text));
-              // print(eventForm.description!);
-              // print(userProvider.userInfo.id);
+              focusScope.unfocus();
             },
             child: const Text('Guardar cambios')),
         // PickCalendar()

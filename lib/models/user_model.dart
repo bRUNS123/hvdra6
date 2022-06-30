@@ -49,7 +49,7 @@ class UserInfoResponse {
   String? rut;
   dynamic birthDate;
   dynamic gender;
-  dynamic phoneNumber;
+  int? phoneNumber;
   String? notes;
   bool? isSuperadmin;
   bool? isEmailActivated;
@@ -82,7 +82,7 @@ class UserInfoResponse {
     String? rut,
     dynamic birthDate,
     dynamic gender,
-    dynamic phoneNumber,
+    int? phoneNumber,
     String? notes,
     bool? isSuperadmin,
     bool? isEmailActivated,
@@ -182,7 +182,9 @@ class UserInfoResponse {
         defaultCompany: json["default_company"],
         companyDiscountPlan: json["company_discount_plan"],
         companyDiscountPlanHolder: json["company_discount_plan_holder"],
-        addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
+        addresses: json["addresses"],
+
+        // addresses: (json["addresses"].map((x) => x)),
       );
   factory UserInfoResponse.toClear(Map<String, dynamic> json) =>
       UserInfoResponse(

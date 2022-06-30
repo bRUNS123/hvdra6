@@ -12,7 +12,8 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<AuthService>(context, listen: false);
+    final userProvider = Provider.of<AuthService>(context);
+
     return Stack(
       // alignment: Alignment.center,
       children: [
@@ -48,8 +49,8 @@ class Body extends StatelessWidget {
                           UserPropiedad(title: 'Primer Apellido'),
                           UserPropiedad(title: 'Segundo Apellido'),
                           UserPropiedad(title: 'Email'),
-                          UserPropiedad(title: 'Teléfono'),
                           UserPropiedad(title: 'Rut'),
+                          UserPropiedad(title: 'Teléfono'),
                         ],
                       ),
                       const SizedBox(width: 30),
@@ -61,9 +62,9 @@ class Body extends StatelessWidget {
                           UserData(
                               title: '${userProvider.userInfo.secondLastName}'),
                           UserData(title: '${userProvider.userInfo.email}'),
+                          UserData(title: '${userProvider.userInfo.rut}'),
                           UserData(
                               title: '${userProvider.userInfo.phoneNumber}'),
-                          UserData(title: '${userProvider.userInfo.rut}'),
                         ],
                       )
                     ],

@@ -57,15 +57,9 @@ class AuthService extends ChangeNotifier {
     userInfo = userDatos;
 
     print(userInfo.firstName);
-    // final Map<String, dynamic> decodedResp = json.decode(resp.body);
-    // userInfo = decodedResp;
-    // notifyListeners();
-    // print(decodedResp);
 
-    // final Map<String, dynamic> decodedResp = json.decode(resp.body);
+    notifyListeners();
 
-    // print(decodedResp);
-    // userInfo = decodedResp;
     return '';
   }
 
@@ -101,6 +95,7 @@ class AuthService extends ChangeNotifier {
     final resp =
         await http.patch(url, body: userModel.toJson(), headers: headers);
     print(resp.body);
+    notifyListeners();
     return '';
   }
 }

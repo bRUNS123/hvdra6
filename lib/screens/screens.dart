@@ -7,6 +7,5 @@ export 'profile/edit_profile_screen.dart';
 export 'welcome/welcome_screen.dart';
 export 'news/news_screen.dart';
 export 'event/event_screen.dart';
-export 'event/newevent_screen.dart';
 export 'event/background_event.dart';
 export 'package:hydraflutter/screens/auth/login/widgets/card_container.dart';
