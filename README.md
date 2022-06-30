@@ -7,10 +7,15 @@ Proyecto Hvdra Flutter.
 -Realizar Flutter pub get.
 
 ## Tareas.
+
 -Utilizar mismo modelo para peticiones (CopyWith).
+
 -GetProfesionals (Revisar, utilizar mismo modelo).
+
 -Validar formularios (Events, User).
+
 -Parametro id a service getUserById.
+
 -Separar logica event_screen.
 
 
