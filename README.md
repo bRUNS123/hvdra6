@@ -6,7 +6,15 @@ Proyecto Hvdra Flutter.
 
 -Realizar Flutter pub get.
 
--Servidor DJANGO.
+## Tareas.
+-Utilizar mismo modelo para peticiones (CopyWith).
+-GetProfesionals (Revisar, utilizar mismo modelo).
+-Validar formularios (Events, User).
+-Parametro id a service getUserById.
+-Separar logica event_screen.
+
+
+## Backend: DJANGO.
 
 <!-- - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook) -->

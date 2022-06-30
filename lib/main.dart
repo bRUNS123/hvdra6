@@ -4,7 +4,6 @@ import 'package:hydraflutter/providers/event_form_provider.dart';
 import 'package:hydraflutter/providers/user_form_provider.dart';
 
 import 'package:hydraflutter/routes/routes.dart';
-import 'package:hydraflutter/screens/auth/login/login_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';

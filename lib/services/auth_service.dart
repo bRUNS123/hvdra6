@@ -17,7 +17,7 @@ class AuthService extends ChangeNotifier {
       "username": email,
       "password": password,
     };
-    print(authData);
+
     final url = Uri.http(_baseURL, '/api/token/');
     final resp = await http.post(url, body: json.encode(authData), headers: {
       "Content-Type": "application/json",
@@ -27,7 +27,6 @@ class AuthService extends ChangeNotifier {
     if (decodedResp.containsKey('access')) {
       final String access = (decodedResp['access']);
       final String refresh = (decodedResp['refresh']);
-      print(json.encode(authData));
 
       print('ACCESS: $access');
       print('REFRESH: $refresh');
@@ -55,8 +54,6 @@ class AuthService extends ChangeNotifier {
     final resp = await http.get(url, headers: headers);
     final UserInfoResponse userDatos = UserInfoResponse.fromJson(resp.body);
     userInfo = userDatos;
-
-    print(userInfo.firstName);
 
     notifyListeners();
 

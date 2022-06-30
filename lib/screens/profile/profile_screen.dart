@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hydraflutter/screens/profile/widgets/profile_body.dart';
+import 'package:hydraflutter/screens/profile/components/profile_body.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);

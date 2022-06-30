@@ -12,6 +12,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final userProvider = Provider.of<AuthService>(context);
 
     return Stack(
@@ -72,7 +73,8 @@ class Body extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 const Divider(thickness: 2),
-                RoundedButton(
+                PrimaryButton(
+                    widthSize: size.width * 0.55,
                     text: 'Editar Información',
                     press: () {
                       Navigator.of(context).pushNamed('editprofile');

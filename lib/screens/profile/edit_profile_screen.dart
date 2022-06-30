@@ -6,7 +6,6 @@ import 'package:hydraflutter/screens/screens.dart';
 import 'package:hydraflutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/providers.dart';
 import '../../services/services.dart';
 
 class EditProfileScreen extends StatelessWidget {

@@ -42,9 +42,7 @@ class LoginButton extends StatelessWidget {
                 //Obtener datos de usuario.
                 final String? errorGettingData =
                     await authService.usernameInfo(loginForm.email);
-                if (errorGettingData == null) {
-                  print('Todo bien');
-                }
+                if (errorGettingData == null) {}
 
                 // Navigator.pushReplacementNamed(context, 'home');
               } else {

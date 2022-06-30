@@ -7,3 +7,4 @@ export 'package:hydraflutter/widgets/drawer/custom_drawer.dart';
 export 'custom_floatingbutton.dart';
 export 'custom_textfield.dart';
 export 'custom_emailfield.dart';
+export 'custom_primarybutton.dart';

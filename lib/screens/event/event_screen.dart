@@ -5,7 +5,6 @@ import 'package:hydraflutter/providers/event_form_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/getProfessional_model.dart';
 import '../../models/models.dart';
 import '../../services/services.dart';
 import '../../themes/colors.dart';
@@ -30,6 +29,8 @@ class _EventScreenState extends State<EventScreen> {
     TextEditingController controllerInitialDate =
         TextEditingController(text: '');
     TextEditingController controllerEndDate = TextEditingController(text: '');
+
+    final navigatorContext = Navigator.of(context);
 
     // List<Profesionales> profesionales;
 
@@ -63,16 +64,8 @@ class _EventScreenState extends State<EventScreen> {
                                     controllers.text = profesional.fullName!;
 
                                     // final idProfesional = profesional.id;
-                                    print(profesional.fullName);
-                                    profesionalId = profesional.id!;
 
-                                    // print(controllers.text);
-                                    // print(profesional.id!);
-                                    // ScaffoldMessenger.of(context)
-                                    //   ..removeCurrentSnackBar()
-                                    //   ..showSnackBar(SnackBar(
-                                    //       content: Text(
-                                    //           'Profesional: ${profesional.fullName}')));
+                                    profesionalId = profesional.id!;
                                   },
                                   itemBuilder: (context,
                                       GetProfessionalList? suggestion) {
@@ -180,14 +173,7 @@ class _EventScreenState extends State<EventScreen> {
                                       ));
 
                                       await eventProvider.refreshEvents();
-                                      Navigator.pop(context);
-
-                                      // print(userProvider.userInfo.id);
-                                      // print(controllers.text);
-                                      // print(DateTime.parse(
-                                      //     controllerInitialDate.text));
-                                      // print(DateTime.parse(
-                                      //     controllerEndDate.text));
+                                      navigatorContext.pop();
                                     },
                                     child: const Text('Crear Evento')),
                               ])));
@@ -212,10 +198,6 @@ class _EventScreenState extends State<EventScreen> {
         Flexible(
           child: _listEvents(),
         ),
-        // SizedBox(
-        //     height: 400,
-        //     width: double.infinity,
-        //     child: listProfesionales(context))
       ]),
     );
   }
@@ -248,9 +230,6 @@ class _EventScreenState extends State<EventScreen> {
                           eventService.deleteEvent(events[i].id!);
                           eventProvider.refreshEvents();
                           //Metodo de eliminar0
-
-                          //  Provider.of<ScanListProvider>(context, listen: false)
-                          // .borrarScanPorId(scans[i].id);
                         },
                         background: Stack(
                           children: [
@@ -322,16 +301,8 @@ class _EventScreenState extends State<EventScreen> {
                                               profesional.fullName!;
 
                                           // final idProfesional = profesional.id;
-                                          print(profesional.fullName);
-                                          profesionalId = profesional.id!;
 
-                                          // print(controllers.text);
-                                          // print(profesional.id!);
-                                          // ScaffoldMessenger.of(context)
-                                          //   ..removeCurrentSnackBar()
-                                          //   ..showSnackBar(SnackBar(
-                                          //       content: Text(
-                                          //           'Profesional: ${profesional.fullName}')));
+                                          profesionalId = profesional.id!;
                                         },
                                         itemBuilder: (context,
                                             GetProfessionalList? suggestion) {
@@ -386,10 +357,6 @@ class _EventScreenState extends State<EventScreen> {
                                           keyboardType: TextInputType.name,
                                         ),
                                       ),
-                                      // const SizedBox(
-                                      //   height: 30,
-                                      // ),
-                                      // listProfesionales(context),
                                       CustomTextField(
                                         controller: controllerEditInitialDate,
                                         labelText: 'Fecha de inicio',
@@ -442,7 +409,6 @@ class _EventScreenState extends State<EventScreen> {
                                   ),
                                   ElevatedButton(
                                       onPressed: () {
-                                        print(profesionalId);
                                         final eventProvider =
                                             Provider.of<EventFormProvider>(
                                                 context,
@@ -562,7 +528,7 @@ class _EventScreenState extends State<EventScreen> {
       context: context,
       initialDateRange: DateTimeRange(
         start: DateTime.now(),
-        end: DateTime.now().add(Duration(days: 7)),
+        end: DateTime.now().add(const Duration(days: 7)),
       ),
       firstDate: DateTime(2022),
       lastDate: DateTime(DateTime.now().year + 5),
@@ -600,10 +566,5 @@ class _EventScreenState extends State<EventScreen> {
 
     controller!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.start);
     controllerEnd!.text = DateFormat('yyyy-MM-dd').format(newDateRanger.end);
-    // eventForm.controllerInitialDate.text =
-    //     DateFormat('yyyy-MM-dd').format(newDateRanger.start);
-
-    // eventForm.controllerEndDate.text =
-    //     DateFormat('yyyy-MM-dd').format(newDateRanger.end);
   }
 }

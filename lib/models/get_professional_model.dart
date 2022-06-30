@@ -2,7 +2,7 @@ class GetProfessionalsLists {
   List<GetProfessionalList> profesionales = [];
 
   GetProfessionalsLists.fromJsonToList(List<dynamic> jsonList) {
-    if (jsonList == null) return;
+    if (jsonList.isEmpty) return;
     for (var element in jsonList) {
       final profesional = GetProfessionalList.fromJsonToMap(element);
       profesionales.add(profesional);
