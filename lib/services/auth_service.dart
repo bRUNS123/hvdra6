@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hydraflutter/models/user_model.dart';
+import 'package:hydraflutter/services/services.dart';
 
 class AuthService extends ChangeNotifier {
   //127.0.0.1:8000
@@ -25,11 +26,10 @@ class AuthService extends ChangeNotifier {
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if (decodedResp.containsKey('access')) {
-      final String access = (decodedResp['access']);
-      final String refresh = (decodedResp['refresh']);
-
-      print('ACCESS: $access');
-      print('REFRESH: $refresh');
+      // final String access = (decodedResp['access']);
+      // final String refresh = (decodedResp['refresh']);
+      // print('ACCESS: $access');
+      // print('REFRESH: $refresh');
       await storage.write(key: 'access', value: decodedResp['access']);
       await storage.write(key: 'refresh', value: decodedResp['refresh']);
 
@@ -91,8 +91,13 @@ class AuthService extends ChangeNotifier {
     final url = Uri.http(_baseURL, '/profiles/1/');
     final resp =
         await http.patch(url, body: userModel.toJson(), headers: headers);
-    print(resp.body);
-    notifyListeners();
+
+    if (resp.statusCode == 200) {
+      NotificationsService.showSnackbar(
+          'Se ha actualizado correctamente al usuario.');
+      notifyListeners();
+    }
+
     return '';
   }
 }

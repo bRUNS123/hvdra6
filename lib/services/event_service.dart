@@ -10,21 +10,6 @@ class EventService extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
   final String _baseURL = '10.0.2.2:8000';
 
-  Future<String?> newEvent(Event eventModel) async {
-    final String? access = await storage.read(key: 'access');
-    final headers = {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $access"
-    };
-
-    final url = Uri.http(_baseURL, '/events/');
-    final resp =
-        await http.post(url, body: eventModel.toJson(), headers: headers);
-
-    print(resp.body);
-    return '';
-  }
-
   Future<List<Event>> getEventsById() async {
     final String? access = await storage.read(key: 'access');
 
@@ -64,6 +49,25 @@ class EventService extends ChangeNotifier {
     // final EventModel eventDatos = EventModel.fromJson(resp.body);
   }
 
+  Future<String?> newEvent(Event eventModel) async {
+    final String? access = await storage.read(key: 'access');
+    final headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $access"
+    };
+
+    final url = Uri.http(_baseURL, '/events/');
+    final resp =
+        await http.post(url, body: eventModel.toJson(), headers: headers);
+
+    if (resp.statusCode == 200) {
+      NotificationsService.showSnackbar(
+          'Se ha creado correctamente el evento.');
+    }
+
+    return '';
+  }
+
   Future<String?> deleteEvent(int id) async {
     final String? access = await storage.read(key: 'access');
     final headers = {
@@ -96,8 +100,6 @@ class EventService extends ChangeNotifier {
     if (resp.statusCode == 200) {
       NotificationsService.showSnackbar(
           'Se ha modificado correctamente el evento: $id.');
-
-      print(resp.body);
     }
 
     return '';

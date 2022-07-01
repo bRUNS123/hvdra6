@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydraflutter/bloc/blocs.dart';
 import 'package:hydraflutter/themes/appthemes.dart';
 
-class EventBackground extends StatelessWidget {
+class CustomBackground extends StatelessWidget {
   final Widget child;
-  const EventBackground({
+  const CustomBackground({
     Key? key,
     required this.child,
   }) : super(key: key);

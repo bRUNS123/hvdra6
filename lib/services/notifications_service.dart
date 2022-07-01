@@ -6,7 +6,7 @@ class NotificationsService {
 
   static showSnackbar(String message) {
     final snackBar = SnackBar(
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         content: Text(
           message,
           style: const TextStyle(color: Colors.black, fontSize: 16),

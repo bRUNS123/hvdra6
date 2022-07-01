@@ -21,19 +21,13 @@ class EditProfileScreen extends StatelessWidget {
       child: Scaffold(
           extendBody: true,
           appBar: const CustomAppBar(title: 'Editar Perfil'),
-          body: EventBackground(
+          body: CustomBackground(
             child: SingleChildScrollView(
               child: Column(children: [
                 CardContainer(
                     child: Stack(
                   children: [
                     const _EditUserForm(),
-                    // MultiProvider(providers: [
-                    //   ChangeNotifierProvider(
-                    //     create: (_) => AuthService(),
-                    //     child: const _EditUserForm(),
-                    //   ),
-                    // ]),
                     SizedBox(height: size.height * 0.04),
                   ],
                 ))

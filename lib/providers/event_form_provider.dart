@@ -10,6 +10,7 @@ class EventFormProvider extends ChangeNotifier {
 
   String? title;
   String? description;
+  int? profesionalId;
 
   DateTimeRange? dateRange;
   DateTimeRange? dateEditRange;

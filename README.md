@@ -1,4 +1,4 @@
-# hVDRAFLUTTER v0.0.1
+# hVDRAFLUTTER v0.0.2
 
 Proyecto Hvdra Flutter.
 
@@ -16,7 +16,7 @@ Proyecto Hvdra Flutter.
 
 -Parametro id a service getUserById.
 
--Separar logica event_screen.
+
 
 
 ## Backend: DJANGO.
