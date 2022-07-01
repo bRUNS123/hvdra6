@@ -12,6 +12,7 @@ class CardContainer extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
       child: Container(
+        height: size.height * 0.71,
         padding: const EdgeInsets.all(20),
         width: double.infinity,
         decoration: _cardDecoration(),

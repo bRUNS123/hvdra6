@@ -82,6 +82,7 @@ class EventService extends ChangeNotifier {
           'Se ha eliminado correctamente el evento: $id.');
 
       print(resp.body);
+      // notifyListeners();
     }
 
     return '';

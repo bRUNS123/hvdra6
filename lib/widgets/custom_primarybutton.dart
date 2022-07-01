@@ -40,7 +40,7 @@ class PrimaryButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           textStyle: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           )),
       child: Text(
         text,

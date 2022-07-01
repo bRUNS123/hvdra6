@@ -31,7 +31,7 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
           validator: (value) {
             return (value != null && value.length >= 3)
                 ? null
-                : 'La contraseña debe contenter 3 caracteres';
+                : 'Contraseña debe contener 3 caracteres minimos...';
           },
           onChanged: (value) {
             loginForm.password = value;
@@ -52,7 +52,7 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
             ),
             labelText: 'Contraseña',
             labelStyle: const TextStyle(color: Colors.grey),
-            hintText: 'contraseña1...',
+            hintText: 'contraseña...',
             icon: Icon(
               Icons.lock_outline,
               color: Theme.of(context).colorScheme.secondary,

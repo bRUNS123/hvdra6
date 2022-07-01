@@ -66,7 +66,7 @@ class _LoginForm extends StatelessWidget {
               controller: loginForm.controller,
               onChanged: (value) => loginForm.email = value,
             ),
-            SizedBox(height: size.height * 0.035),
+            SizedBox(height: size.height * 0.03),
             const RoundedPasswordField(
               confirmPassword: false,
             ),

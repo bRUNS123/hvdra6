@@ -74,7 +74,7 @@ class Body extends StatelessWidget {
                 const SizedBox(height: 10),
                 const Divider(thickness: 2),
                 PrimaryButton(
-                    widthSize: size.width * 0.55,
+                    widthSize: size.width * 0.7,
                     text: 'Editar Información',
                     press: () {
                       Navigator.of(context).pushNamed('editprofile');
