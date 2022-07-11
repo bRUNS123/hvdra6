@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/event_service.dart';
+import '../../../services/services.dart';
 
 editEvent(Event event, context) async {
   showDialog(
@@ -158,6 +159,8 @@ editEvent(Event event, context) async {
                               TextEditingController(
                                   text: DateFormat('yyyy-MM-dd')
                                       .format(event.end));
+                          final userProvider =
+                              Provider.of<AuthService>(context, listen: false);
                           final eventService =
                               Provider.of<EventService>(context, listen: false);
                           final eventProvider = Provider.of<EventFormProvider>(
@@ -172,7 +175,8 @@ editEvent(Event event, context) async {
                                       controllerEditEndDate.text),
                                   professional:
                                       (eventProvider.profesionalId!)));
-                          eventProvider.refreshEvents();
+                          eventProvider.refreshEvents(
+                              id: userProvider.userInfo.id);
                           navigator.pop();
                         },
                         child: const Text('Guardar')),

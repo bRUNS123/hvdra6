@@ -9,3 +9,4 @@ export 'news/news_screen.dart';
 export 'event/event_screen.dart';
 export '../widgets/custom_background.dart';
 export 'package:hydraflutter/screens/auth/login/widgets/card_container.dart';
+export 'event/test_table_calendar.dart';

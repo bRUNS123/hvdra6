@@ -4,19 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hydraflutter/services/services.dart';
+
 import '../models/models.dart';
 
 class EventService extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
   final String _baseURL = '10.0.2.2:8000';
 
-  Future<List<Event>> getEventsById() async {
+  Future<List<Event>> getEventsById([int? id]) async {
     final String? access = await storage.read(key: 'access');
 
+    print('idService: $id');
     //Pedir ID del patient.
 
     final queryParameters = {
-      'patient_id': '1',
+      'patient_id': '$id',
     };
     final headers = {
       "Content-Type": "application/json",

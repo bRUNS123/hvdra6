@@ -5,6 +5,24 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('eventhorarios');
+            },
+            child: Text('Event Example'),
+          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed('choiceexample');
+          //   },
+          //   child: Text('Choice Example'),
+          // ),
+        ],
+      ),
+    );
   }
 }

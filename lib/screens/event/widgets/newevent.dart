@@ -141,7 +141,8 @@ newEvent(BuildContext context) async {
                                 end: DateTime.parse(controllerEndDate.text),
                               ));
 
-                              await eventProvider.refreshEvents();
+                              await eventProvider.refreshEvents(
+                                  id: userProvider.userInfo.id);
                               navigatorContext.pop();
                             },
                             child: const Text('Crear Evento')),

@@ -49,7 +49,7 @@ class CustomDrawer extends StatelessWidget {
               selectedPage(context, 1);
               final eventProvider =
                   Provider.of<EventFormProvider>(context, listen: false);
-              eventProvider.refreshEvents();
+              eventProvider.refreshEvents(id: userProvider.userInfo.id);
             },
           ),
           BuildMenuItem(

@@ -23,23 +23,30 @@ class _EventScreenState extends State<EventScreen> {
     // List<Profesionales> profesionales;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await newEvent(context);
-        },
-        child: const Icon(Icons.add),
-      ),
-      appBar: const CustomAppBar(
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      // floatingActionButton:
+      appBar: CustomAppBar(
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () async {
+                  await newEvent(context);
+                },
+                icon: const Icon(Icons.add),
+              ),
+              IconButton(
+                // heroTag: null,
+                onPressed: () async {
+                  Navigator.of(context).pushNamed('eventhorarios');
+                },
+                icon: const Icon(Icons.more_time),
+              ),
+            ],
+          ),
+        ],
         title: 'Eventos',
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //     child: IconButton(
-        //       icon: const Icon(Icons.menu),
-        //       onPressed: () => Scaffold.of(context).openDrawer(),
-        //     ),
-        //   )
-        // ],
       ),
       body: Column(children: [
         Flexible(
@@ -52,16 +59,18 @@ class _EventScreenState extends State<EventScreen> {
   Widget _listEvents() {
     final size = MediaQuery.of(context).size;
     final eventProvider = Provider.of<EventFormProvider>(context);
-
+    final userProvider = Provider.of<AuthService>(context, listen: false);
     return RefreshIndicator(
       strokeWidth: 3,
       color: Theme.of(context).colorScheme.secondary,
       triggerMode: RefreshIndicatorTriggerMode.anywhere,
-      onRefresh: eventProvider.refreshEvents,
+      onRefresh: () =>
+          eventProvider.refreshEvents(id: userProvider.userInfo.id),
       child: FutureBuilder(
-          future: eventProvider.getEventsById(),
+          future: eventProvider.getEventsById(id: userProvider.userInfo.id),
           builder: (_, AsyncSnapshot<List<Event>> snapshot) {
             if (snapshot.hasData) {
+              print('widgetId : ${userProvider.userInfo.id}');
               final events = snapshot.data;
               return ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -71,11 +80,13 @@ class _EventScreenState extends State<EventScreen> {
                         key: UniqueKey(),
                         direction: DismissDirection.endToStart,
                         onDismissed: (DismissDirection direction) async {
+                          print('id enWidget: ${userProvider.userInfo.id}');
                           final eventService =
                               Provider.of<EventService>(context, listen: false);
 
                           await eventService.deleteEvent(events[i].id!);
-                          await eventProvider.refreshEvents();
+                          await eventProvider.refreshEvents(
+                              id: userProvider.userInfo.id);
                           //Metodo de eliminar0
                         },
                         background: Stack(
@@ -119,11 +130,11 @@ class _EventScreenState extends State<EventScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Fecha inicio: ${DateFormat('yyyy-MM-dd').format(event.start)}',
+                          'Fecha inicio: ${DateFormat('yyyy-MM-dd - hh:mm').format(event.start)}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          'Fecha termino: ${DateFormat('yyyy-MM-dd').format(event.end)}',
+                          'Fecha termino: ${DateFormat('yyyy-MM-dd - hh:mm').format(event.end)}',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],

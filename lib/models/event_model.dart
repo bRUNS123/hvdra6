@@ -44,7 +44,7 @@ class Event {
         start: DateTime.parse(json["start"]),
         end: DateTime.parse(json["end"]),
         description: json["description"],
-        company: json["company"],
+        company: json["company"].toString(),
         professional: json["professional"],
         patient: json["patient"],
       );

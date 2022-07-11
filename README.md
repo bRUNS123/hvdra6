@@ -14,8 +14,7 @@ Proyecto Hvdra Flutter.
 
 -Validar formularios (Events, User).
 
--Parametro id a service getUserById.
-
+-Refresh Token / Interceptors
 
 
 

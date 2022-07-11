@@ -32,7 +32,6 @@ void main() async {
         ),
         // ChangeNotifierProvider(create: (_) => EventFormProvider())
         ChangeNotifierProvider(create: (_) => UserFormProvider()),
-
         ChangeNotifierProvider(create: (_) => EventService()),
         ChangeNotifierProvider(create: (_) => EventFormProvider()),
       ],
